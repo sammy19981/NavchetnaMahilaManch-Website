@@ -232,18 +232,18 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 
     // Prepare form data
     const formData = {
+        timestamp: new Date().toLocaleString(),
         name: name,
         email: email,
-        phone: phone,
-        timestamp: new Date().toLocaleString()
+        phone: phone
     };
 
     // Send data to Google Sheets
-    fetch('https://script.google.com/macros/s/AKfycbxlj-sebnSHMicMlR7cvG09zpMLIWqCzwAHLngIpTQp9xNo3d-r1nEfvO6GHVTI-jRf/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbw0Nt2cDelb-L_J7TL66u_nq4AsO3Ko_vJbT_Xjjqr_z688PSOa_xT1Egp7msSOkiI6/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData)
     })
