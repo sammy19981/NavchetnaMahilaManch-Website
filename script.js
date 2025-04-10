@@ -231,21 +231,17 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     submitBtn.textContent = 'Submitting...';
 
     // Prepare form data
-    const formData = {
-        timestamp: new Date().toLocaleString(),
-        name: name,
-        email: email,
-        phone: phone
-    };
+    const formData = new FormData();
+    formData.append('timestamp', new Date().toLocaleString());
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('phone', phone);
 
     // Send data to Google Sheets
     fetch('https://script.google.com/macros/s/AKfycbw0Nt2cDelb-L_J7TL66u_nq4AsO3Ko_vJbT_Xjjqr_z688PSOa_xT1Egp7msSOkiI6/exec', {
         method: 'POST',
         mode: 'no-cors',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
+        body: formData
     })
     .then(() => {
         // Show success message
