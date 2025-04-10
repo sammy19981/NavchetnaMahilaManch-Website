@@ -201,4 +201,64 @@ document.addEventListener('DOMContentLoaded', function() {
         
         lastScrollTop = scrollTop;
     });
+});
+
+// Contact Form Handling
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contactForm');
+    const formMessage = document.getElementById('formMessage');
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(contactForm);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const phone = formData.get('phone');
+
+            // Validate phone number
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(phone)) {
+                showMessage('Please enter a valid 10-digit phone number', 'error');
+                return;
+            }
+
+            try {
+                // Replace this URL with your Google Apps Script Web App URL
+                const response = await fetch('YOUR_GOOGLE_SCRIPT_URL', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
+                // Clear form and show success message
+                contactForm.reset();
+                showMessage('Thank you for contacting us! We will get back to you soon.', 'success');
+            } catch (error) {
+                showMessage('Something went wrong. Please try again later.', 'error');
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    // Function to show form messages
+    function showMessage(message, type) {
+        formMessage.textContent = message;
+        formMessage.className = `form-message ${type}`;
+        
+        // Hide message after 5 seconds
+        setTimeout(() => {
+            formMessage.textContent = '';
+            formMessage.className = 'form-message';
+        }, 5000);
+    }
 }); 
