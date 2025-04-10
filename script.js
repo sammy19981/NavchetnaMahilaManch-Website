@@ -204,59 +204,64 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Contact Form Handling
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('contactForm');
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form elements
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
     const formMessage = document.getElementById('formMessage');
+    
+    // Get form data
+    const name = form.name.value;
+    const email = form.email.value;
+    const phone = form.phone.value;
 
-    if (form) {
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Validate phone number
-            const phoneInput = document.getElementById('phone');
-            const phonePattern = /^[0-9]{10}$/;
-            if (!phonePattern.test(phoneInput.value)) {
-                formMessage.className = 'form-message error';
-                formMessage.textContent = 'Please enter a valid 10-digit phone number';
-                formMessage.style.display = 'block';
-                return;
-            }
-
-            // Disable submit button and show loading state
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalBtnText = submitBtn.textContent;
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending...';
-
-            try {
-                const formData = new FormData(form);
-                const response = await fetch('https://script.google.com/macros/s/AKfycbxlj-sebnSHMicMlR7cvG09zpMLIWqCzwAHLngIpTQp9xNo3d-r1nEfvO6GHVTI-jRf/exec', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    // Show success message
-                    formMessage.className = 'form-message success';
-                    formMessage.textContent = 'Thank you! Your message has been sent successfully.';
-                    formMessage.style.display = 'block';
-                    
-                    // Reset form
-                    form.reset();
-                } else {
-                    throw new Error('Network response was not ok');
-                }
-            } catch (error) {
-                // Show error message
-                formMessage.className = 'form-message error';
-                formMessage.textContent = 'Sorry, there was an error sending your message. Please try again later.';
-                formMessage.style.display = 'block';
-                console.error('Error:', error);
-            } finally {
-                // Re-enable submit button
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalBtnText;
-            }
-        });
+    // Validate phone number (10 digits)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phone)) {
+        formMessage.textContent = 'Please enter a valid 10-digit phone number';
+        formMessage.className = 'form-message error';
+        return;
     }
+
+    // Disable submit button
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    // Prepare form data
+    const formData = {
+        name: name,
+        email: email,
+        phone: phone,
+        timestamp: new Date().toLocaleString()
+    };
+
+    // Send data to Google Sheets
+    fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        // Show success message
+        formMessage.textContent = 'Thank you for contacting us! We will get back to you soon.';
+        formMessage.className = 'form-message success';
+        
+        // Reset form
+        form.reset();
+    })
+    .catch(error => {
+        // Show error message
+        formMessage.textContent = 'Sorry, something went wrong. Please try again later.';
+        formMessage.className = 'form-message error';
+    })
+    .finally(() => {
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
+    });
 }); 
