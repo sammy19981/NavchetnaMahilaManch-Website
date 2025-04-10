@@ -1,9 +1,9 @@
 // Initialize AOS
 AOS.init({
     duration: 800,
-    easing: 'ease',
+    easing: 'ease-in-out',
     once: true,
-    offset: 100
+    mirror: false
 });
 
 // Smooth scrolling for navigation links
@@ -205,60 +205,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Contact Form Handling
 document.addEventListener('DOMContentLoaded', function() {
-    const contactForm = document.getElementById('contactForm');
+    const form = document.getElementById('contactForm');
     const formMessage = document.getElementById('formMessage');
 
-    if (contactForm) {
-        contactForm.addEventListener('submit', async function(e) {
+    if (form) {
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            const formData = new FormData(contactForm);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const phone = formData.get('phone');
-
             // Validate phone number
-            const phoneRegex = /^[0-9]{10}$/;
-            if (!phoneRegex.test(phone)) {
-                showMessage('Please enter a valid 10-digit phone number', 'error');
+            const phoneInput = document.getElementById('phone');
+            const phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phoneInput.value)) {
+                formMessage.className = 'form-message error';
+                formMessage.textContent = 'Please enter a valid 10-digit phone number';
+                formMessage.style.display = 'block';
                 return;
             }
 
+            // Disable submit button and show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
             try {
-                // Replace this URL with your Google Apps Script Web App URL
+                const formData = new FormData(form);
                 const response = await fetch('https://script.google.com/macros/s/AKfycbxlj-sebnSHMicMlR7cvG09zpMLIWqCzwAHLngIpTQp9xNo3d-r1nEfvO6GHVTI-jRf/exec', {
                     method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        email: email,
-                        phone: phone,
-                        timestamp: new Date().toISOString()
-                    })
+                    body: formData
                 });
 
-                // Clear form and show success message
-                contactForm.reset();
-                showMessage('Thank you for contacting us! We will get back to you soon.', 'success');
+                if (response.ok) {
+                    // Show success message
+                    formMessage.className = 'form-message success';
+                    formMessage.textContent = 'Thank you! Your message has been sent successfully.';
+                    formMessage.style.display = 'block';
+                    
+                    // Reset form
+                    form.reset();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
             } catch (error) {
-                showMessage('Something went wrong. Please try again later.', 'error');
+                // Show error message
+                formMessage.className = 'form-message error';
+                formMessage.textContent = 'Sorry, there was an error sending your message. Please try again later.';
+                formMessage.style.display = 'block';
                 console.error('Error:', error);
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
             }
         });
-    }
-
-    // Function to show form messages
-    function showMessage(message, type) {
-        formMessage.textContent = message;
-        formMessage.className = `form-message ${type}`;
-        
-        // Hide message after 5 seconds
-        setTimeout(() => {
-            formMessage.textContent = '';
-            formMessage.className = 'form-message';
-        }, 5000);
     }
 }); 
