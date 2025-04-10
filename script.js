@@ -233,28 +233,33 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     // Send data to Formspree
     fetch('https://formspree.io/f/xpzvwkrw', {
         method: 'POST',
+        mode: 'cors',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
         },
         body: JSON.stringify({
             name: name,
             email: email,
             phone: phone,
-            timestamp: new Date().toLocaleString()
+            _subject: "New Contact Form Submission",
+            message: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}`
         })
     })
     .then(response => {
         if (response.ok) {
-            // Show success message
-            formMessage.textContent = 'Thank you for contacting us! We will get back to you soon.';
-            formMessage.className = 'form-message success';
-            formMessage.style.display = 'block';
-            
-            // Reset form
-            form.reset();
-        } else {
-            throw new Error('Network response was not ok');
+            return response.json();
         }
+        throw new Error('Network response was not ok');
+    })
+    .then(data => {
+        // Show success message
+        formMessage.textContent = 'Thank you for contacting us! We will get back to you soon.';
+        formMessage.className = 'form-message success';
+        formMessage.style.display = 'block';
+        
+        // Reset form
+        form.reset();
     })
     .catch(error => {
         // Show error message
