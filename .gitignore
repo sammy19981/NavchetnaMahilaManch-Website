@@ -1,6 +1,12 @@
+# System Files
 .DS_Store
+Thumbs.db
+
+# IDE Files
+.vscode/
+.idea/
+
+# Dependencies
 node_modules/
 .env
-*.log
-.vscode/
-.idea/ 
+*.log 
