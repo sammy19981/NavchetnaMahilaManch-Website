@@ -203,10 +203,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Add Supabase client initialization at the top after AOS initialization
+// Supabase configuration
 const SUPABASE_URL = 'https://ychxawrxbrimnucpvuow.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljaHhhd3J4YnJpbW51Y3B2dW93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyNjkyMTIsImV4cCI6MjA1OTg0NTIxMn0.ibgPSg60maA1yevlLQxL_AeIBQeOfLaoBY-QPVdhZ5E';
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Initialize Supabase client
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Contact Form Handling
 document.getElementById('contactForm').addEventListener('submit', async function(e) {
@@ -246,9 +248,12 @@ document.getElementById('contactForm').addEventListener('submit', async function
                     phone: phone,
                     created_at: new Date().toISOString()
                 }
-            ]);
+            ])
+            .select();
 
-        if (error) throw error;
+        if (error) {
+            throw error;
+        }
 
         // Show success message
         formMessage.textContent = 'Thank you for contacting us! We will get back to you soon.';
