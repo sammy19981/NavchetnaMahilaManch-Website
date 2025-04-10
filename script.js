@@ -151,4 +151,23 @@ document.addEventListener('DOMContentLoaded', function() {
             icon.classList.add('fa-bars');
         });
     });
+});
+
+// Hide navbar on scroll down, show on scroll up
+let lastScrollTop = 0;
+const navbar = document.querySelector('.navbar');
+const navbarHeight = navbar.getBoundingClientRect().height;
+
+window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (scrollTop > lastScrollTop && scrollTop > navbarHeight) {
+        // Scrolling down
+        navbar.style.transform = 'translateY(-100%)';
+    } else {
+        // Scrolling up
+        navbar.style.transform = 'translateY(0)';
+    }
+    
+    lastScrollTop = scrollTop;
 }); 

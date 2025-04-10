@@ -16,6 +16,12 @@
     box-sizing: border-box;
 }
 
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -23,9 +29,11 @@ body {
 }
 
 .container {
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    overflow: hidden;
 }
 
 /* Navigation */
@@ -101,6 +109,19 @@ body {
 
 .nav-links a i {
     margin-right: 5px;
+}
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001;
+}
+
+.menu-toggle i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
 }
 
 /* Hero Section */
@@ -926,33 +947,13 @@ h2 i {
 
 /* Mobile Responsive Styles */
 @media screen and (max-width: 768px) {
-    /* Navigation */
     .navbar {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.5rem 1rem;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        background: rgba(255, 255, 255, 0.95);
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        height: auto;
+        padding: 0.8rem 1rem;
+        transition: transform 0.3s ease-in-out;
     }
 
-    .logo {
-        margin: 0;
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .logo-img {
-        width: 24px;
-        height: 24px;
+    .menu-toggle {
+        display: block;
     }
 
     .nav-links {
@@ -960,28 +961,43 @@ h2 i {
         top: 60px;
         left: 0;
         right: 0;
-        background: white;
+        background: var(--white);
         padding: 1rem;
         display: none;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        text-align: center;
     }
 
     .nav-links.active {
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
     }
 
     .nav-links li {
-        margin: 0.5rem 0;
+        margin: 0;
+        width: 100%;
     }
 
-    /* Add hamburger menu */
-    .menu-toggle {
+    .nav-links a {
         display: block;
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 0.5rem;
+        padding: 0.8rem;
+        width: 100%;
+        border-radius: 5px;
+    }
+
+    .nav-links a:hover {
+        background: var(--light-bg);
+    }
+
+    .nav-links a.active {
+        background: var(--gradient);
+        color: var(--white);
+    }
+
+    .nav-links a.active::after {
+        display: none;
     }
 
     /* Hero Section */
