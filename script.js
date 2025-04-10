@@ -224,6 +224,8 @@ document.getElementById('contactForm').addEventListener('submit', async function
     const email = form.email.value;
     const phone = form.phone.value;
 
+    console.log('Form Data:', { name, email, phone }); // Debug log
+
     // Validate phone number (10 digits)
     const phoneRegex = /^[0-9]{10}$/;
     if (!phoneRegex.test(phone)) {
@@ -238,20 +240,21 @@ document.getElementById('contactForm').addEventListener('submit', async function
     submitBtn.textContent = 'Submitting...';
 
     try {
+        console.log('Attempting to insert data into Supabase...'); // Debug log
+        
         // Insert data into Supabase
         const { data, error } = await supabase
             .from('contacts')
-            .insert([
-                {
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    created_at: new Date().toISOString()
-                }
-            ])
-            .select();
+            .insert({
+                name: name,
+                email: email,
+                phone: phone
+            });
+
+        console.log('Supabase Response:', { data, error }); // Debug log
 
         if (error) {
+            console.error('Supabase Error:', error); // Debug log
             throw error;
         }
 
@@ -263,11 +266,12 @@ document.getElementById('contactForm').addEventListener('submit', async function
         // Reset form
         form.reset();
     } catch (error) {
+        console.error('Detailed Error:', error); // Debug log
+        
         // Show error message
         formMessage.textContent = 'Sorry, something went wrong. Please try again later.';
         formMessage.className = 'form-message error';
         formMessage.style.display = 'block';
-        console.error('Error:', error);
     } finally {
         // Re-enable submit button
         submitBtn.disabled = false;
