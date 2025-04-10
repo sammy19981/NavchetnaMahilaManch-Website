@@ -246,21 +246,28 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 console.log('Attempting to insert data into Supabase...'); // Debug log
                 
-                // Insert data into Supabase
-                const { data, error } = await supabase
-                    .from('contacts')
-                    .insert({
+                // Insert data into Supabase using REST API
+                const response = await fetch('https://ychxawrxbrimnucpvuow.supabase.co/rest/v1/contacts', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljaHhhd3J4YnJpbW51Y3B2dW93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyNjkyMTIsImV4cCI6MjA1OTg0NTIxMn0.ibgPSg60maA1yevlLQxL_AeIBQeOfLaoBY-QPVdhZ5E',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljaHhhd3J4YnJpbW51Y3B2dW93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyNjkyMTIsImV4cCI6MjA1OTg0NTIxMn0.ibgPSg60maA1yevlLQxL_AeIBQeOfLaoBY-QPVdhZ5E',
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
                         name: name,
                         email: email,
                         phone: phone
                     })
-                    .select();
+                });
 
-                console.log('Supabase Response:', { data, error }); // Debug log
+                console.log('Response status:', response.status); // Debug log
 
-                if (error) {
-                    console.error('Supabase Error:', error); // Debug log
-                    throw error;
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Response error:', errorData); // Debug log
+                    throw new Error('Network response was not ok');
                 }
 
                 // Show success message
