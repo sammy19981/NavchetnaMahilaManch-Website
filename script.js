@@ -203,16 +203,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Supabase configuration and initialization
-let supabase;
-document.addEventListener('DOMContentLoaded', function() {
-    const SUPABASE_URL = 'https://ychxawrxbrimnucpvuow.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljaHhhd3J4YnJpbW51Y3B2dW93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyNjkyMTIsImV4cCI6MjA1OTg0NTIxMn0.ibgPSg60maA1yevlLQxL_AeIBQeOfLaoBY-QPVdhZ5E';
-    
-    // Initialize Supabase client
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Initialize Supabase client
+const supabaseUrl = 'https://ychxawrxbrimnucpvuow.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljaHhhd3J4YnJpbW51Y3B2dW93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyNjkyMTIsImV4cCI6MjA1OTg0NTIxMn0.ibgPSg60maA1yevlLQxL_AeIBQeOfLaoBY-QPVdhZ5E';
+const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
 
-    // Contact Form Handling
+// Contact Form Handling
+document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', async function(e) {
@@ -246,30 +243,22 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 console.log('Attempting to insert data into Supabase...'); // Debug log
                 
-                // Insert data into Supabase using REST API
-                const response = await fetch('https://ychxawrxbrimnucpvuow.supabase.co/rest/v1/contacts', {
-                    method: 'POST',
-                    headers: {
-                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljaHhhd3J4YnJpbW51Y3B2dW93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyNjkyMTIsImV4cCI6MjA1OTg0NTIxMn0.ibgPSg60maA1yevlLQxL_AeIBQeOfLaoBY-QPVdhZ5E',
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljaHhhd3J4YnJpbW51Y3B2dW93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyNjkyMTIsImV4cCI6MjA1OTg0NTIxMn0.ibgPSg60maA1yevlLQxL_AeIBQeOfLaoBY-QPVdhZ5E',
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        email: email,
-                        phone: phone
-                    })
-                });
+                // Insert data into Supabase
+                const { data, error } = await supabase
+                    .from('contacts')
+                    .insert([
+                        {
+                            name: name,
+                            email: email,
+                            phone: phone
+                        }
+                    ]);
 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('Response error:', {
-                        status: response.status,
-                        statusText: response.statusText,
-                        body: errorText
-                    });
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                console.log('Supabase Response:', { data, error }); // Debug log
+
+                if (error) {
+                    console.error('Supabase Error:', error); // Debug log
+                    throw error;
                 }
 
                 // Show success message
