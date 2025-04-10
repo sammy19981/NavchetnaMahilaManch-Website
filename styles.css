@@ -928,44 +928,101 @@ h2 i {
 @media screen and (max-width: 768px) {
     /* Navigation */
     .navbar {
-        flex-direction: column;
-        padding: 1rem;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        height: auto;
     }
 
     .logo {
-        margin-bottom: 1rem;
-        text-align: center;
-        font-size: 1.2rem;
+        margin: 0;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .logo-img {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
     }
 
     .nav-links {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 1rem;
+        display: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links.active {
+        display: flex;
         flex-direction: column;
-        width: 100%;
-        text-align: center;
+        align-items: center;
     }
 
     .nav-links li {
         margin: 0.5rem 0;
     }
 
+    /* Add hamburger menu */
+    .menu-toggle {
+        display: block;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+    }
+
     /* Hero Section */
     .hero {
-        min-height: 60vh;
+        margin-top: 60px; /* Account for fixed navbar */
+        min-height: calc(100vh - 60px);
         padding: 2rem 1rem;
+        display: flex;
+        align-items: center;
+        text-align: center;
     }
 
     .hero-content {
-        text-align: center;
         padding: 0 1rem;
+        max-width: 100%;
     }
 
     .hero-content h1 {
         font-size: 2rem;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+
+    .cta-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    /* Adjust main content sections */
+    section {
+        padding: 3rem 1rem;
+    }
+
+    .container {
+        padding: 0;
     }
 
     /* Features Section */
