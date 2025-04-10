@@ -1121,4 +1121,59 @@ h2 i {
         font-size: 0.95rem;
         margin-bottom: 0.6rem;
     }
+}
+
+/* About Page Hero Section */
+.about-hero {
+    position: relative;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    overflow: hidden;
+}
+
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+    z-index: 1;
+}
+
+.about-hero img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.about-hero h1 {
+    position: relative;
+    z-index: 2;
+    font-size: 2.5rem;
+    margin: 0;
+    padding: 0 1rem;
+}
+
+@media screen and (max-width: 768px) {
+    .about-hero {
+        height: 40vh;
+        margin-top: 60px;
+    }
+
+    .about-hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .about-hero img {
+        object-position: center;
+    }
 } 

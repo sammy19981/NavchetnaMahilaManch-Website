@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             try {
                 // Replace this URL with your Google Apps Script Web App URL
-                const response = await fetch('YOUR_GOOGLE_SCRIPT_URL', {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbxlj-sebnSHMicMlR7cvG09zpMLIWqCzwAHLngIpTQp9xNo3d-r1nEfvO6GHVTI-jRf/exec', {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: {
