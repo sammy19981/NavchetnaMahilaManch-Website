@@ -203,8 +203,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Add Supabase client initialization at the top after AOS initialization
+const SUPABASE_URL = 'https://ychxawrxbrimnucpvuow.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljaHhhd3J4YnJpbW51Y3B2dW93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyNjkyMTIsImV4cCI6MjA1OTg0NTIxMn0.ibgPSg60maA1yevlLQxL_AeIBQeOfLaoBY-QPVdhZ5E';
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 // Contact Form Handling
-document.getElementById('contactForm').addEventListener('submit', function(e) {
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     // Get form elements
@@ -230,29 +235,21 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting...';
 
-    // Send data to Formspree
-    fetch('https://formspree.io/f/xpzvwkrw', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            name: name,
-            email: email,
-            phone: phone,
-            _subject: "New Contact Form Submission",
-            message: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}`
-        })
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error('Network response was not ok');
-    })
-    .then(data => {
+    try {
+        // Insert data into Supabase
+        const { data, error } = await supabase
+            .from('contacts')
+            .insert([
+                {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    created_at: new Date().toISOString()
+                }
+            ]);
+
+        if (error) throw error;
+
         // Show success message
         formMessage.textContent = 'Thank you for contacting us! We will get back to you soon.';
         formMessage.className = 'form-message success';
@@ -260,17 +257,15 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
         
         // Reset form
         form.reset();
-    })
-    .catch(error => {
+    } catch (error) {
         // Show error message
         formMessage.textContent = 'Sorry, something went wrong. Please try again later.';
         formMessage.className = 'form-message error';
         formMessage.style.display = 'block';
         console.error('Error:', error);
-    })
-    .finally(() => {
+    } finally {
         // Re-enable submit button
         submitBtn.disabled = false;
         submitBtn.textContent = 'Submit';
-    });
+    }
 }); 
