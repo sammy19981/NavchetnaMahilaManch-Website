@@ -222,6 +222,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     if (!phoneRegex.test(phone)) {
         formMessage.textContent = 'Please enter a valid 10-digit phone number';
         formMessage.className = 'form-message error';
+        formMessage.style.display = 'block';
         return;
     }
 
@@ -238,18 +239,19 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     };
 
     // Send data to Google Sheets
-    fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+    fetch('https://script.google.com/macros/s/AKfycbxlj-sebnSHMicMlR7cvG09zpMLIWqCzwAHLngIpTQp9xNo3d-r1nEfvO6GHVTI-jRf/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData)
     })
-    .then(response => {
+    .then(() => {
         // Show success message
         formMessage.textContent = 'Thank you for contacting us! We will get back to you soon.';
         formMessage.className = 'form-message success';
+        formMessage.style.display = 'block';
         
         // Reset form
         form.reset();
@@ -258,6 +260,8 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
         // Show error message
         formMessage.textContent = 'Sorry, something went wrong. Please try again later.';
         formMessage.className = 'form-message error';
+        formMessage.style.display = 'block';
+        console.error('Error:', error);
     })
     .finally(() => {
         // Re-enable submit button
