@@ -230,27 +230,31 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting...';
 
-    // Prepare form data
-    const formData = new FormData();
-    formData.append('timestamp', new Date().toLocaleString());
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('phone', phone);
-
-    // Send data to Google Sheets
-    fetch('https://script.google.com/macros/s/AKfycbw0Nt2cDelb-L_J7TL66u_nq4AsO3Ko_vJbT_Xjjqr_z688PSOa_xT1Egp7msSOkiI6/exec', {
+    // Send data to Formspree
+    fetch('https://formspree.io/f/xpzvwkrw', {
         method: 'POST',
-        mode: 'no-cors',
-        body: formData
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: phone,
+            timestamp: new Date().toLocaleString()
+        })
     })
-    .then(() => {
-        // Show success message
-        formMessage.textContent = 'Thank you for contacting us! We will get back to you soon.';
-        formMessage.className = 'form-message success';
-        formMessage.style.display = 'block';
-        
-        // Reset form
-        form.reset();
+    .then(response => {
+        if (response.ok) {
+            // Show success message
+            formMessage.textContent = 'Thank you for contacting us! We will get back to you soon.';
+            formMessage.className = 'form-message success';
+            formMessage.style.display = 'block';
+            
+            // Reset form
+            form.reset();
+        } else {
+            throw new Error('Network response was not ok');
+        }
     })
     .catch(error => {
         // Show error message
