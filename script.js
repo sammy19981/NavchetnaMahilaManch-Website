@@ -114,14 +114,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Mobile menu toggle
+// Mobile menu toggle and navigation handling
 document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
+    const navbar = document.querySelector('.navbar');
 
-    menuToggle.addEventListener('click', function() {
+    // Toggle menu
+    menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
         navLinks.classList.toggle('active');
-        // Change icon based on menu state
+        updateMenuIcon();
+    });
+
+    // Function to update menu icon
+    function updateMenuIcon() {
         const icon = menuToggle.querySelector('i');
         if (navLinks.classList.contains('active')) {
             icon.classList.remove('fa-bars');
@@ -130,44 +137,68 @@ document.addEventListener('DOMContentLoaded', function() {
             icon.classList.remove('fa-times');
             icon.classList.add('fa-bars');
         }
-    });
+    }
 
     // Close menu when clicking outside
     document.addEventListener('click', function(event) {
         if (!event.target.closest('.navbar')) {
             navLinks.classList.remove('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
+            updateMenuIcon();
         }
     });
 
-    // Close menu when clicking a link
+    // Handle navigation links
     navLinks.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            
+            // If it's an anchor link on the same page
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                const targetSection = document.querySelector(href);
+                if (targetSection) {
+                    navLinks.classList.remove('active');
+                    updateMenuIcon();
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (href.includes('#')) {
+                // If it's a link to another page with an anchor
+                const [pagePath, anchor] = href.split('#');
+                if (window.location.pathname.endsWith(pagePath)) {
+                    e.preventDefault();
+                    const targetSection = document.querySelector(`#${anchor}`);
+                    if (targetSection) {
+                        navLinks.classList.remove('active');
+                        updateMenuIcon();
+                        targetSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            }
+            
+            // Close menu after clicking any link
             navLinks.classList.remove('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
+            updateMenuIcon();
         });
     });
-});
 
-// Hide navbar on scroll down, show on scroll up
-let lastScrollTop = 0;
-const navbar = document.querySelector('.navbar');
-const navbarHeight = navbar.getBoundingClientRect().height;
+    // Hide navbar on scroll down, show on scroll up
+    let lastScrollTop = 0;
+    const navbarHeight = navbar.getBoundingClientRect().height;
 
-window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    if (scrollTop > lastScrollTop && scrollTop > navbarHeight) {
-        // Scrolling down
-        navbar.style.transform = 'translateY(-100%)';
-    } else {
-        // Scrolling up
-        navbar.style.transform = 'translateY(0)';
-    }
-    
-    lastScrollTop = scrollTop;
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > lastScrollTop && scrollTop > navbarHeight) {
+            // Scrolling down - hide navbar
+            navbar.style.transform = 'translateY(-100%)';
+            // Also close the menu if it's open
+            navLinks.classList.remove('active');
+            updateMenuIcon();
+        } else {
+            // Scrolling up - show navbar
+            navbar.style.transform = 'translateY(0)';
+        }
+        
+        lastScrollTop = scrollTop;
+    });
 }); 
