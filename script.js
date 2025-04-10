@@ -203,78 +203,84 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Supabase configuration
-const SUPABASE_URL = 'https://ychxawrxbrimnucpvuow.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljaHhhd3J4YnJpbW51Y3B2dW93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyNjkyMTIsImV4cCI6MjA1OTg0NTIxMn0.ibgPSg60maA1yevlLQxL_AeIBQeOfLaoBY-QPVdhZ5E';
-
-// Initialize Supabase client
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Contact Form Handling
-document.getElementById('contactForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+// Supabase configuration and initialization
+let supabase;
+document.addEventListener('DOMContentLoaded', function() {
+    const SUPABASE_URL = 'https://ychxawrxbrimnucpvuow.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljaHhhd3J4YnJpbW51Y3B2dW93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyNjkyMTIsImV4cCI6MjA1OTg0NTIxMn0.ibgPSg60maA1yevlLQxL_AeIBQeOfLaoBY-QPVdhZ5E';
     
-    // Get form elements
-    const form = e.target;
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const formMessage = document.getElementById('formMessage');
-    
-    // Get form data
-    const name = form.name.value;
-    const email = form.email.value;
-    const phone = form.phone.value;
+    // Initialize Supabase client
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    console.log('Form Data:', { name, email, phone }); // Debug log
+    // Contact Form Handling
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get form elements
+            const form = e.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const formMessage = document.getElementById('formMessage');
+            
+            // Get form data
+            const name = form.name.value;
+            const email = form.email.value;
+            const phone = form.phone.value;
 
-    // Validate phone number (10 digits)
-    const phoneRegex = /^[0-9]{10}$/;
-    if (!phoneRegex.test(phone)) {
-        formMessage.textContent = 'Please enter a valid 10-digit phone number';
-        formMessage.className = 'form-message error';
-        formMessage.style.display = 'block';
-        return;
-    }
+            console.log('Form Data:', { name, email, phone }); // Debug log
 
-    // Disable submit button
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting...';
+            // Validate phone number (10 digits)
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(phone)) {
+                formMessage.textContent = 'Please enter a valid 10-digit phone number';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+                return;
+            }
 
-    try {
-        console.log('Attempting to insert data into Supabase...'); // Debug log
-        
-        // Insert data into Supabase
-        const { data, error } = await supabase
-            .from('contacts')
-            .insert({
-                name: name,
-                email: email,
-                phone: phone
-            });
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
 
-        console.log('Supabase Response:', { data, error }); // Debug log
+            try {
+                console.log('Attempting to insert data into Supabase...'); // Debug log
+                
+                // Insert data into Supabase
+                const { data, error } = await supabase
+                    .from('contacts')
+                    .insert({
+                        name: name,
+                        email: email,
+                        phone: phone
+                    });
 
-        if (error) {
-            console.error('Supabase Error:', error); // Debug log
-            throw error;
-        }
+                console.log('Supabase Response:', { data, error }); // Debug log
 
-        // Show success message
-        formMessage.textContent = 'Thank you for contacting us! We will get back to you soon.';
-        formMessage.className = 'form-message success';
-        formMessage.style.display = 'block';
-        
-        // Reset form
-        form.reset();
-    } catch (error) {
-        console.error('Detailed Error:', error); // Debug log
-        
-        // Show error message
-        formMessage.textContent = 'Sorry, something went wrong. Please try again later.';
-        formMessage.className = 'form-message error';
-        formMessage.style.display = 'block';
-    } finally {
-        // Re-enable submit button
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit';
+                if (error) {
+                    console.error('Supabase Error:', error); // Debug log
+                    throw error;
+                }
+
+                // Show success message
+                formMessage.textContent = 'Thank you for contacting us! We will get back to you soon.';
+                formMessage.className = 'form-message success';
+                formMessage.style.display = 'block';
+                
+                // Reset form
+                form.reset();
+            } catch (error) {
+                console.error('Detailed Error:', error); // Debug log
+                
+                // Show error message
+                formMessage.textContent = 'Sorry, something went wrong. Please try again later.';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit';
+            }
+        });
     }
 }); 
