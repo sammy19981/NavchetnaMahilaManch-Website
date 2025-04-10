@@ -947,195 +947,146 @@ h2 i {
 
 /* Mobile Responsive Styles */
 @media screen and (max-width: 768px) {
-    .navbar {
-        padding: 0.8rem 1rem;
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .menu-toggle {
-        display: block;
-    }
-
-    .nav-links {
-        position: fixed;
-        top: 60px;
-        left: 0;
-        right: 0;
-        background: var(--white);
+    /* Content Spacing and Indentation */
+    .container {
         padding: 1rem;
-        display: none;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        text-align: center;
     }
 
-    .nav-links.active {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .nav-links li {
-        margin: 0;
-        width: 100%;
-    }
-
-    .nav-links a {
-        display: block;
-        padding: 0.8rem;
-        width: 100%;
-        border-radius: 5px;
-    }
-
-    .nav-links a:hover {
-        background: var(--light-bg);
-    }
-
-    .nav-links a.active {
-        background: var(--gradient);
-        color: var(--white);
-    }
-
-    .nav-links a.active::after {
-        display: none;
-    }
-
-    /* Hero Section */
-    .hero {
-        margin-top: 60px; /* Account for fixed navbar */
-        min-height: calc(100vh - 60px);
-        padding: 2rem 1rem;
-        display: flex;
-        align-items: center;
-        text-align: center;
-    }
-
-    .hero-content {
-        padding: 0 1rem;
-        max-width: 100%;
-    }
-
-    .hero-content h1 {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-        line-height: 1.2;
-    }
-
-    .hero-content p {
-        font-size: 1rem;
-        margin-bottom: 1.5rem;
-        line-height: 1.5;
-    }
-
-    .cta-button {
-        padding: 0.8rem 1.5rem;
-        font-size: 1rem;
-    }
-
-    /* Adjust main content sections */
     section {
-        padding: 3rem 1rem;
+        padding: 2rem 0;
     }
 
-    .container {
-        padding: 0;
+    /* Story Section Mobile */
+    .story-text {
+        padding: 0 1rem;
     }
 
-    /* Features Section */
-    .features {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 1rem;
+    .story-text p {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
     }
 
-    .feature-card {
-        padding: 1.5rem;
-    }
-
-    /* Gallery Section */
-    .gallery-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        padding: 1rem;
-    }
-
-    .gallery-item {
-        height: 250px;
-    }
-
-    /* Program Sections */
-    .program-content {
-        flex-direction: column;
-        padding: 1rem;
-    }
-
-    .program-text, .program-stats {
-        width: 100%;
+    .story-text ul {
         margin: 1rem 0;
+        padding: 0 0.5rem;
     }
 
-    .program-stats {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
+    .story-text ul li {
+        font-size: 1rem;
+        margin-bottom: 0.8rem;
+        padding-left: 1.2rem;
     }
 
-    .stat-card {
+    /* Registration Details Mobile */
+    .detail-card {
+        padding: 1.5rem 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .details-list {
+        padding: 0 0.5rem;
+    }
+
+    .details-list li {
         padding: 1rem;
+        margin-bottom: 1rem;
     }
 
-    /* Impact Section */
-    .impact-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 1rem;
+    .details-list strong {
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
     }
 
-    /* Contact Section */
-    .contact-info {
-        flex-direction: column;
-        gap: 1.5rem;
+    .details-list p {
+        font-size: 1rem;
     }
 
-    .contact-item {
-        width: 100%;
-        margin: 0.5rem 0;
+    /* Achievement Section Mobile */
+    .achievements-grid {
+        padding: 0 1rem;
     }
 
-    .social-links {
-        margin-top: 2rem;
+    .achievement-item {
+        margin-bottom: 2rem;
     }
 
-    .social-icon {
-        width: 40px;
-        height: 40px;
-        margin: 0 0.5rem;
+    .achievement-item h3 {
+        font-size: 1.2rem;
+        margin: 1rem 0 0.5rem;
     }
 
-    /* General Container */
-    .container {
-        padding: 2rem 1rem;
+    .achievement-item p {
+        font-size: 1rem;
+        padding: 0 0.5rem;
+    }
+
+    /* Team Section Mobile */
+    .team-grid {
+        padding: 0 1rem;
+    }
+
+    .team-member {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .member-image {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 1rem;
+    }
+
+    .team-member h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .designation {
+        font-size: 1rem;
     }
 
     /* Section Headers */
     section h2 {
         font-size: 1.8rem;
-        margin-bottom: 1.5rem;
+        margin: 1rem 0 1.5rem;
+        padding: 0 1rem;
+    }
+
+    /* Community Outreach Section */
+    .org-details h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+        padding: 0 1rem;
+    }
+
+    .org-details p {
+        padding: 0 1rem;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        line-height: 1.6;
     }
 }
 
-/* Small Mobile Devices */
+/* Extra Small Devices */
 @media screen and (max-width: 480px) {
-    .hero-content h1 {
-        font-size: 1.8rem;
+    .container {
+        padding: 0.8rem;
     }
 
-    .program-stats {
-        grid-template-columns: 1fr;
+    .story-text p, 
+    .story-text ul li,
+    .details-list p,
+    .achievement-item p {
+        font-size: 0.95rem;
     }
 
-    .contact-item p {
-        font-size: 0.9rem;
+    section h2 {
+        font-size: 1.6rem;
+    }
+
+    .detail-card {
+        padding: 1.2rem 0.8rem;
     }
 }
 
