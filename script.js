@@ -262,12 +262,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                 });
 
-                console.log('Response status:', response.status); // Debug log
-
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('Response error:', errorData); // Debug log
-                    throw new Error('Network response was not ok');
+                    const errorText = await response.text();
+                    console.error('Response error:', {
+                        status: response.status,
+                        statusText: response.statusText,
+                        body: errorText
+                    });
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
                 // Show success message
